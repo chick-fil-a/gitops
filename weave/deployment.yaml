@@ -1,0 +1,42 @@
+##---
+# Source: weave-cloud/templates/deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: weave-agent
+  namespace: weave
+  labels:
+    app: weave-cloud
+    chart: weave-cloud-0.3.0
+    release: weave-cloud
+    heritage: Tiller
+spec:
+  minReadySeconds: 30
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: weave-cloud
+      release: weave-cloud
+  template:
+    metadata:
+      labels:
+        app: weave-cloud
+        release: weave-cloud
+    spec:
+      serviceAccountName: weave-cloud
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: weave-agent
+        image: "quay.io/weaveworks/launcher-agent:1.1.0"
+        imagePullPolicy: IfNotPresent
+        args:
+        - -agent.poll-url=https://get.weave.works/k8s/agent.yaml?instanceID={{.InstanceID}}
+        - -wc.hostname=cloud.weave.works
+        - -wc.token=$(WEAVE_CLOUD_TOKEN)
+        env:
+        - name: WEAVE_CLOUD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: weave-cloud

@@ -1,0 +1,50 @@
+---
+# Source: vessel/templates/deployment.yaml
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vessel
+  namespace: kube-system
+  labels:
+    app: vessel
+    chart: vessel-1.0.0
+    release: vessel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vessel
+      release: vessel
+  template:
+    metadata:
+      labels:
+        app: vessel
+        release: vessel
+    spec:
+      serviceAccountName: vessel
+      containers:
+        - name: vessel
+          image: chick-fil-a/vessel:1.1.3
+          args: ["--atlas=http://host.docker.internal/atlas/","--cluster=kubecon.cluster.riot.edge", "--sleep=5"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: vessel-git
+            mountPath: "/var/secret/git"
+            readOnly: true
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: 640Mi
+      volumes:
+        - name: vessel-git
+          secret:
+            secretName: vessel-git
+            items:
+            - key: username
+              path: username
+            - key: password
+              path: password
