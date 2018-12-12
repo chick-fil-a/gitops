@@ -1,6 +1,8 @@
 # KubeCon + CloudNativeCon Demo
 
-This demo is open source and is available at https://github.com/chick-fil-a.
+This GitOps demo is open source and is available at https://github.com/chick-fil-a.
+
+## Setup
 
 Please see [setup](SETUP.md) for instructions on setting up an environment for the demo.
 
@@ -72,7 +74,7 @@ kubectl -n kube-system logs <pod> -f
 - Apply is run in only one namespace.  In order to be namespace specific, the Namespace: metadata must be provided.
 - In order to prune resources no longer in the repository, Heritage: Fleet label is used.
 - If all k8s resources need to be removed, must have at least one resource per namespace, see empty.yaml.
-- There is an incomplete default whitelist of resource, so --prune-whitelist must be provided.  See [https://github.com/kubernetes/kubernetes/blob/b1aed1593e5c22a5f7fa4890fc87808dca9ad9e1/pkg/kubectl/cmd/apply/apply.go](getRESTMappings in apply.go)
+- There is an incomplete default whitelist of resource, so --prune-whitelist must be provided.  See [getRESTMappings in apply.go](https://github.com/kubernetes/kubernetes/blob/b1aed1593e5c22a5f7fa4890fc87808dca9ad9e1/pkg/kubectl/cmd/apply/apply.go)
 - Any resource that creates another resource must add Heritage: Fleet
 - Must be run multiple times as it does not order resource dependencies
 
