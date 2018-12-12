@@ -52,13 +52,22 @@ docker run --rm \
 # get root token from output of above command
 vault login <Root Token>
 
+# get token for ui
+vault policy write readonly - <<EOF
+path "secret/*" {
+  capabilities = ["read", "list"]
+}
+EOF
+
+vault token create -policy=readonly
+
 # store sample secret
 cat notsosecret.yaml | vault kv put secret/atlas/kubecon.cluster.riot.edge/podinfo/secret.yaml spec=-
 cat notsosecret.yaml | vault kv put secret/atlas/atlanta.cluster.riot.edge/podinfo/secret.yaml spec=-
 
 ```
 
-Brose to http://vault.cloud:8200 and login using :
+Browse to http://vault.cloud:8200 and login using :
 
 ```
 Root Token: <root token from vault startup>

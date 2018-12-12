@@ -55,6 +55,8 @@ kubectl apply -f . --recursive -l heritage=Fleet --prune \
   --prune-whitelist storage.k8s.io/v1/StorageClass  \
   --prune-whitelist rbac.authorization.k8s.io/v1/ClusterRole  \
   --prune-whitelist rbac.authorization.k8s.io/v1/ClusterRoleBinding
+
+kubectl -n demo get all
 ```
 
 ## GitOps via Vessel
